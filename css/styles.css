@@ -1,0 +1,19 @@
+img {
+    display: block;
+    width: 360px;
+    height: 200px;
+    transition: width 0.3s, height 0.3s;
+}
+img:hover,
+img:focus {
+    width: 376px;
+    height: 208px;
+}
+
+.gallery {
+    flex-wrap: wrap;
+    display: flex;
+    list-style: none;
+    gap: 24px;
+    justify-content: center;
+}
