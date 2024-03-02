@@ -1,4 +1,3 @@
-
 const images = [
   {
     preview:
@@ -69,12 +68,12 @@ gallery.insertAdjacentHTML("beforeend", galleryMarkup(images));
 function galleryMarkup(arr) {
   return arr
     .map(
-        ({ preview, original, description }) => `<li class="gallery-item">
+      ({ preview, original, description }) => `<li class="gallery-item">
   <a class="gallery-link" href="${original}">
     <img
       class="gallery-image"
       src="${preview}"
-      data-source="large-image.jpg"
+      data-source="${original}"
       alt="${description}"
     />
   </a>
@@ -83,3 +82,24 @@ function galleryMarkup(arr) {
     .join("");
 }
 
+gallery.addEventListener("click", handleModalOpen);
+
+function handleModalOpen(event) {
+  event.preventDefault();
+  if (event.currentTarget === event.target) return;
+
+  const currentImage = event.target
+    .closest(".gallery-item")
+    .querySelector("img");
+  const srcImg = currentImage.dataset.source;
+  console.log(srcImg);
+
+  const newImage = images.find((image) => image.original === srcImg);
+  const instance = basicLightbox.create(`
+    <div class="modal">
+      <img class="modalImg" src="${srcImg}" alt="${newImage.description}">
+    </div>
+  `);
+  instance.show()
+  instance.element().querySelector('img').onclick = () => instance.close()
+		}

@@ -2,14 +2,17 @@ img {
     display: block;
     width: 360px;
     height: 200px;
-    transition: width 0.3s, height 0.3s;
-}
-img:hover,
-img:focus {
-    width: 376px;
-    height: 208px;
+    transition: transform 0.3s ease-in-out; 
 }
 
+.modal img {
+    width: 1112px;
+    height: 640px;
+}
+
+img:hover {
+  transform: scale(1.1);
+}
 .gallery {
     flex-wrap: wrap;
     display: flex;
