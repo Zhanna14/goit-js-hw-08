@@ -68,7 +68,6 @@ const gallery = document.querySelector(".gallery");
 gallery.addEventListener("click", handleModalOpen);
 gallery.insertAdjacentHTML("beforeend", galleryMarkup(images));
 
-
 function galleryMarkup(arr) {
   return arr
     .map(
@@ -89,29 +88,25 @@ function galleryMarkup(arr) {
 function handleModalOpen(event) {
   event.preventDefault();
 
-  if (event.currentTarget === "img") return; // Перевірка, чи клікнуто на зображення
+  if (event.target.nodeName !== "IMG") return; // Перевірка, чи клікнуто на зображення
 
-  const currentImage = event.target
-    .closest(".gallery-item")
-    .querySelector("img"); // Отримання поточного зображення, на яке клікнуто, шляхом знаходження ближнього елемента з класом "gallery-item" і вибору першого тегу <img> всередині цього елемента.
+  const currentImage = event.target; // Отримання поточного зображення, на яке клікнуто, шляхом знаходження ближнього елемента з класом "gallery-item" і вибору першого тегу <img> всередині цього елемента.
   const srcImg = currentImage.dataset.source; // Отримання джерела великого зображення
   console.log(srcImg);
 
-  const newImage = images.find((image) => image.original === srcImg); // Пошук об'єкта зображення в масиві images за оригінальним джерелом
+  const altDescription = currentImage.alt; // Отримання значення атрибута alt відповідного тегу <img>
+
   const instance = basicLightbox.create(`
     <div class="modal">
-      <img class="modalImg" src="${srcImg}" alt="${newImage.description}">
+      <img class="modalImg" src="${srcImg}" alt="${altDescription}">
     </div>
   `);
   instance.show(); // Показ модального вікна
   instance.element().querySelector("img").onclick = () => instance.close(); // Закриття модального вікна при кліку на велике зображення
-document.addEventListener("keydown", function(event) {
-  if (event.key === "Escape" && instance) {
-    // Перевіряємо, чи натиснута клавіша "Escape" і чи створене модальне вікно
-    instance.close(); // Закриваємо модальне вікно
-  }
-});
-  };
-
-
- 
+  document.addEventListener("keydown", function (event) {
+    if (event.key === "Escape" && instance) {
+      // Перевіряємо, чи натиснута клавіша "Escape" і чи створене модальне вікно
+      instance.close(); // Закриваємо модальне вікно
+    }
+  });
+}
