@@ -63,8 +63,12 @@ const images = [
     description: "Lighthouse Coast Sea",
   },
 ];
+
 const gallery = document.querySelector(".gallery");
+gallery.addEventListener("click", handleModalOpen);
 gallery.insertAdjacentHTML("beforeend", galleryMarkup(images));
+
+
 function galleryMarkup(arr) {
   return arr
     .map(
@@ -82,24 +86,32 @@ function galleryMarkup(arr) {
     .join("");
 }
 
-gallery.addEventListener("click", handleModalOpen);
-
 function handleModalOpen(event) {
   event.preventDefault();
-  if (event.currentTarget === event.target) return;
+
+  if (event.currentTarget === "img") return; // Перевірка, чи клікнуто на зображення
 
   const currentImage = event.target
     .closest(".gallery-item")
-    .querySelector("img");
-  const srcImg = currentImage.dataset.source;
+    .querySelector("img"); // Отримання поточного зображення, на яке клікнуто, шляхом знаходження ближнього елемента з класом "gallery-item" і вибору першого тегу <img> всередині цього елемента.
+  const srcImg = currentImage.dataset.source; // Отримання джерела великого зображення
   console.log(srcImg);
 
-  const newImage = images.find((image) => image.original === srcImg);
+  const newImage = images.find((image) => image.original === srcImg); // Пошук об'єкта зображення в масиві images за оригінальним джерелом
   const instance = basicLightbox.create(`
     <div class="modal">
       <img class="modalImg" src="${srcImg}" alt="${newImage.description}">
     </div>
   `);
-  instance.show()
-  instance.element().querySelector('img').onclick = () => instance.close()
-		}
+  instance.show(); // Показ модального вікна
+  instance.element().querySelector("img").onclick = () => instance.close(); // Закриття модального вікна при кліку на велике зображення
+document.addEventListener("keydown", function(event) {
+  if (event.key === "Escape" && instance) {
+    // Перевіряємо, чи натиснута клавіша "Escape" і чи створене модальне вікно
+    instance.close(); // Закриваємо модальне вікно
+  }
+});
+  };
+
+
+ 
